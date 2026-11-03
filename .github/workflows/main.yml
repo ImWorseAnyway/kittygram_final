@@ -84,7 +84,6 @@ jobs:
           CI=true npm test
 
   build_and_push_to_docker_hub:
-    needs: [backend_tests, frontend_tests]
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
@@ -122,8 +121,7 @@ jobs:
           tags: ${{ secrets.DOCKER_USERNAME }}/kittygram_gateway:latest
 
   send_message:
-    needs: build_and_push_to_docker_hub
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    if: always()
     runs-on: ubuntu-latest
     steps:
       - name: Send message to Telegram
